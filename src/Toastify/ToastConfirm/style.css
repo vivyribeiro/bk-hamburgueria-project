@@ -1,0 +1,42 @@
+.toast__Content {
+	gap: var(--gap-6);
+	align-items: center;
+	justify-content: center;
+	height: calc(var(--height-medium) * 2);
+}
+
+.toast__Content > span {
+	font-size: var(--text-size-1);
+	font-weight: var(--font-weight-3);
+	color: var(--grey-100);
+	text-align: center;
+}
+
+.toast__Buttons {
+	width: var(--width-1);
+	height: calc(var(--height-medium));
+
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--gap-3);
+}
+
+.toast__Buttons button {
+	color: var(--white);
+	font-size: var(--text-size-2);
+	padding: var(--gap-6) var(--gap-5);
+	border-radius: var(--radius-2);
+}
+
+.toast__Buttons button:nth-child(1) {
+	background-color: var(--error);
+}
+
+.toast__Buttons button:nth-child(2) {
+	background-color: var(--primary);
+}
+
+.toast__Buttons > button:hover {
+	filter: opacity(0.5);
+}
