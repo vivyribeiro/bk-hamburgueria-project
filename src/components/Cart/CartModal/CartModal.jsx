@@ -1,45 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef } from "react";
 import { AiOutlineClear } from "react-icons/ai";
 import { FaCartArrowDown } from "react-icons/fa";
 
+import CartList from "../CartList";
 import { StyledModalContent, StyledModal } from "./style";
 import { ThemeLabel, ThemeTitle } from "../../../styles/typography";
-import CartList from "../CartList";
 
-const CartModal = ({
-	isModalVisible,
-	setIsModalVisible,
-	cartList,
-	clearCart,
-	removeProduct
-}) => {
+const CartModal = ({ isModalVisible, cartList, clearCart, removeProduct }) => {
 	const totalPurchase = cartList.reduce(
 		(acc, { price, quantity }) => (acc += price * quantity),
 		0
 	);
 
-	const modalCartRef = useRef();
-
-	useEffect(() => {
-		const handleOuterclick = ev => {
-			if (modalCartRef.current) {
-				!modalCartRef.current.contains(ev.target) && setIsModalVisible(false);
-			}
-		};
-
-		document.addEventListener("mousedown", handleOuterclick);
-
-		return () => {
-			document.removeEventListener("mousedown", handleOuterclick);
-		};
-	}, []);
-
 	return (
 		isModalVisible && (
 			<StyledModal>
 				<StyledModalContent
-					ref={modalCartRef}
 					className="animation"
 					isModalVisible={isModalVisible}
 				>
@@ -59,7 +35,10 @@ const CartModal = ({
 										Total:
 									</ThemeLabel>
 									<ThemeLabel color="--grey-50" type="price">
-										{`R$ ${totalPurchase.toFixed(2).replace(".", ",")}`}
+										{totalPurchase.toLocaleString("pt-BR", {
+											style: "currency",
+											currency: "BRL"
+										})}
 									</ThemeLabel>
 								</div>
 							</div>

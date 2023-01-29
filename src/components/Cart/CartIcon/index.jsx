@@ -1,4 +1,5 @@
 import React from "react";
+
 import { FaShoppingCart } from "react-icons/fa";
 import { VscChromeClose } from "react-icons/vsc";
 
@@ -11,12 +12,15 @@ const CartIcon = ({ isModalVisible, setIsModalVisible, cartList }) => {
 		<CartButton
 			isModalVisible={isModalVisible}
 			data-cart-counter={cartTotal}
-			onClick={() => setIsModalVisible(true)}
+			onClick={() => setIsModalVisible(!isModalVisible)}
 		>
 			{isModalVisible ? (
-				<VscChromeClose title="Fechar carrinho" />
+				<VscChromeClose
+					title="Fechar carrinho"
+					style={{ pointerEvents: "none" }}
+				/>
 			) : (
-				<FaShoppingCart title="carrinho" />
+				<FaShoppingCart title="carrinho" style={{ pointerEvents: "none" }} />
 			)}
 		</CartButton>
 	);

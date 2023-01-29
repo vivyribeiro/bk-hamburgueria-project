@@ -1,9 +1,10 @@
 import React from "react";
-import { ThemeButton } from "../../../styles/buttons";
+
+import StyledLi from "./style";
 import { Container } from "../../../styles/global";
+import { ThemeButton } from "../../../styles/buttons";
 import { ThemeContainerImg } from "../../../styles/imgContainer";
 import { ThemeLabel, ThemeTitle } from "../../../styles/typography";
-import StyledLi from "./style";
 
 const Card = ({ product, addCart }) => {
 	const { id, name, category, price, img } = product;
@@ -26,7 +27,10 @@ const Card = ({ product, addCart }) => {
 					{category}
 				</ThemeLabel>
 				<ThemeLabel color={"--primary"} type={"price"}>
-					{`R$ ${price.toFixed(2).replace(".", ",")}`}
+					{price.toLocaleString("pt-BR", {
+						style: "currency",
+						currency: "BRL"
+					})}
 				</ThemeLabel>
 				<ThemeButton onClick={() => addCart(id)}>Adicionar</ThemeButton>
 			</Container>

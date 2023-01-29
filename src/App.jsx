@@ -1,34 +1,29 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
-
 import { useEffect, useState } from "react";
 import { GlobalStyle } from "./styles/global";
-import { api } from "./services/api";
 import { ToastContainer } from "react-toastify";
 
-import CartIcon from "./components/Cart/CartIcon";
-import CartModal from "./components/Cart/CartModal/CartModal";
-import Header from "./components/Header";
-import Main from "./components/Main";
-import { VscRunErrors } from "react-icons/vsc";
 import { MdNoFood } from "react-icons/md";
+import { VscRunErrors } from "react-icons/vsc";
 import { FaCartPlus, FaShoppingCart } from "react-icons/fa";
-import {
-	errorToaster,
-	successToaster,
-	warningToaster
-} from "./Toastify/toastifyFunctions";
+
+import { api } from "./services/api";
+import Main from "./components/Main";
+import Header from "./components/Header";
+import CartIcon from "./components/Cart/CartIcon";
+import { Toaster } from "./Toastify/customToaster";
+import CartModal from "./components/Cart/CartModal/CartModal";
 import { ToastConfirm } from "./Toastify/ToastConfirm/ToastConfirm";
 
 const App = () => {
-	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [cartList, setCartList] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [productList, setProductList] = useState([]);
+	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [filteredProducts, setFilteredProducts] = useState([]);
-	const [cartList, setCartList] = useState([]);
 
-	// Get products from api
 	useEffect(() => {
 		const getProductList = async () => {
 			try {
@@ -40,9 +35,10 @@ const App = () => {
 			} catch (error) {
 				console.log(error.message);
 				setTimeout(() => {
-					errorToaster(
+					Toaster(
 						"Ops! Algo deu errado, tente novamente mais tarde.",
-						<VscRunErrors size={24} color={"var(--error)"} />
+						<VscRunErrors size={24} color={"var(--error)"} />,
+						"error"
 					);
 				}, 2600);
 			} finally {
@@ -54,7 +50,6 @@ const App = () => {
 		getProductList();
 	}, []);
 
-	// Verify existing product and adding or not to cart
 	const addCart = id => {
 		const currentSale = productList.find(product => product.id === id);
 		const newCartList = cartList.map(product => {
@@ -69,25 +64,25 @@ const App = () => {
 
 		cartList.some(product => product.id === id)
 			? (setCartList(newCartList),
-			  successToaster(
+			  Toaster(
 					"Foi adicionado +1 unidade desse produto!",
-					<FaCartPlus size={24} color={"var(--primary)"} />
+					<FaCartPlus size={24} color={"var(--primary)"} />,
+					"success"
 			  ))
 			: (setCartList([...cartList, { ...currentSale, quantity: 1 }]),
-			  successToaster(
+			  Toaster(
 					"O produto foi adicionado com sucesso!",
-					<FaCartPlus size={24} color={"var(--primary)"} />
+					<FaCartPlus size={24} color={"var(--primary)"} />,
+					"success"
 			  ));
 	};
 
-	// Adding Shopping list to localStorage and update state of cart total
 	useEffect(() => {
 		if (cartList.length) {
 			localStorage.setItem("@SHOPPING_LIST", JSON.stringify(cartList));
 		}
 	}, [cartList]);
 
-	// Getting Shopping list from localStorage
 	useEffect(() => {
 		const localStorageList = localStorage.getItem("@SHOPPING_LIST");
 		if (localStorageList) {
@@ -95,7 +90,6 @@ const App = () => {
 		}
 	}, []);
 
-	//Filtered products
 	const filterProductsSearch = formData => {
 		const newProductList = productList.filter(product => {
 			const productNormalize = product.name
@@ -122,13 +116,13 @@ const App = () => {
 		newProductList.length
 			? setFilteredProducts(newProductList)
 			: (setFilteredProducts(productList),
-			  warningToaster(
+			  Toaster(
 					"Produto não encontrado, tente novamente!",
-					<MdNoFood size={24} color={"var(--warning)"} />
+					<MdNoFood size={24} color={"var(--warning)"} />,
+					"warning"
 			  ));
 	};
 
-	//Removing product on cart
 	const removeProduct = selectedProduct => {
 		const newCartListWithRemoved = cartList.filter(
 			product => product !== selectedProduct
@@ -147,19 +141,20 @@ const App = () => {
 		const confirmFn = () => {
 			selectedProduct.quantity > 1
 				? (setCartList(newCartListWithSub),
-				  successToaster(
+				  Toaster(
 						"Foi removido 1 unidade desse produto!",
-						<FaShoppingCart size={24} color={"var(--sucess)"} />
+						<FaShoppingCart size={24} color={"var(--sucess)"} />,
+						"success"
 				  ))
 				: (setCartList(newCartListWithRemoved),
-				  successToaster(
+				  Toaster(
 						"Produto removido com sucesso!",
-						<FaShoppingCart size={24} color={"var(--sucess)"} />
+						<FaShoppingCart size={24} color={"var(--sucess)"} />,
+						"success"
 				  ));
 		};
 
 		ToastConfirm(confirmFn, "Deseja excluir mesmo este produto?");
-
 		if (cartList.length === 1) {
 			localStorage.removeItem("@SHOPPING_LIST");
 		}
@@ -170,9 +165,10 @@ const App = () => {
 			setCartList([]);
 			localStorage.removeItem("@SHOPPING_LIST");
 
-			successToaster(
+			Toaster(
 				"O carrinho foi limpo com sucesso!",
-				<FaShoppingCart size={24} color={"var(--sucess)"} />
+				<FaShoppingCart size={24} color={"var(--sucess)"} />,
+				"success"
 			);
 		};
 
@@ -193,7 +189,6 @@ const App = () => {
 
 			<CartModal
 				isModalVisible={isModalVisible}
-				setIsModalVisible={setIsModalVisible}
 				cartList={cartList}
 				removeProduct={removeProduct}
 				clearCart={clearCart}

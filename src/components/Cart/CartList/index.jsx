@@ -1,7 +1,7 @@
 import React from "react";
 
-import StyledUlCart from "./style";
 import CartItem from "./CartItem";
+import StyledUlCart from "./style";
 
 const CartList = ({ cartList, removeProduct }) => {
 	return (

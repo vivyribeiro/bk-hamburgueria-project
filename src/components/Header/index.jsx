@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 
+import { CgSearchLoading } from "react-icons/cg";
+
 import StyledHeader from "./style";
 import logo from "../../assets/logo.svg";
-import { Container } from "../../styles/global";
-import { ThemeContainerImg } from "../../styles/imgContainer";
 import { ThemeInput } from "../../styles/form";
+import { Container } from "../../styles/global";
 import { ThemeButton } from "../../styles/buttons";
-import { CgSearchLoading } from "react-icons/cg";
-import { infoToaster } from "../../Toastify/toastifyFunctions";
+import { Toaster } from "../../Toastify/customToaster";
+import { ThemeContainerImg } from "../../styles/imgContainer";
 
 const Header = ({ filterProductsSearch }) => {
 	const [formData, setFormData] = useState("");
@@ -22,9 +23,10 @@ const Header = ({ filterProductsSearch }) => {
 			inputSearch.classList.add("empty__input");
 			inputSearch.focus();
 
-			infoToaster(
+			Toaster(
 				"Por favor, informe o produto ou categoria para pesquisa!",
-				<CgSearchLoading size={24} color={"var(--info)"} />
+				<CgSearchLoading size={24} color={"var(--info)"} />,
+				"info"
 			);
 
 			setTimeout(() => {

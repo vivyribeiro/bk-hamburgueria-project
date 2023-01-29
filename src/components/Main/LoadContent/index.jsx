@@ -1,7 +1,8 @@
 import React from "react";
 
-import StyledLoadContainer from "./style";
 import { IoFastFoodSharp } from "react-icons/io5";
+
+import StyledLoadContainer from "./style";
 import { ThemeTitle } from "../../../styles/typography";
 
 const LoadContent = () => {
